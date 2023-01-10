@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/josealm22/server_html/issues"
   },
-  "homepage": "https://github.com/josealm22/server_html#readme"
+  "homepage": "https://github.com/josealm22/server_html#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
