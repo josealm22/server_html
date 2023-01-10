@@ -1,0 +1,76 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Formulario de tareas
+  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous')
+  // Google Fonts
+  link(href='https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap' rel='stylesheet')
+  link(rel='stylesheet' href='styles.css')
+  script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+form#trello-form
+  .titulo
+    h1 Formulario de Tareas
+  label(for='card-name') Nombre de la tarjeta:
+  br
+  input#card-name(type='text' name='card-name')
+  br
+  label(for='card-description') Descripci&oacute;n de la tarjeta:
+  br
+  textarea#card-description(name='card-description')
+  br
+  label(for='list-select') Selecciona una lista:
+  br
+  select#list-select
+  label(for='member-select') Miembro de la tarea:
+  select#member-select
+  button(type='submit') Crear tarjeta
+script.
+  require('dotenv').config();
+  const key = process.env.key;
+  const token = process.env.token;
+  const boardId = process.env.boardId;
+  const url = `https://api.trello.com/1/boards/${boardId}/lists?key=${key}&token=${token}`;
+  const urlm = `https://api.trello.com/1/boards/${boardId}/members?key=${key}&token=${token}`;
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+  const select = document.getElementById('list-select');
+  data.forEach(list => {
+  const option = document.createElement('option');
+  option.value = list.id;
+  option.text = list.name;
+  select.add(option);
+  });
+  });
+  fetch(urlm)
+  .then(response => response.json())
+  .then(data => {
+  const select = document.getElementById('member-select');
+  data.forEach(member => {
+  const option = document.createElement('option');
+  option.value = member.id;
+  option.text = member.fullName;
+  select.add(option);
+  });
+  });
+  const form = document.getElementById('trello-form');
+  form.addEventListener('submit', event => {
+  event.preventDefault();
+  const cardName = document.getElementById('card-name').value;
+  const cardDescription = document.getElementById('card-description').value;
+  const listId = document.getElementById('list-select').value;
+  const selectedMember = document.getElementById('member-select').value;
+  const url = `https://api.trello.com/1/cards?name=${cardName}&desc=${cardDescription}&idList=${listId}&idMembers=${selectedMember}&key=${key}&token=${token}`;
+  fetch(url, { method: 'POST' });
+  form.reset();
+  });
+  /*Promise.all([fetch(url), fetch(listsUrl)])
+  .then(([membersResponse, listsResponse]) => {
+  return Promise.all([membersResponse.json(), listsResponse.json()]);
+  })
+  .then(([members, lists]) => {
+  console.log(members); // Imprime la lista de miembros del tablero
+  console.log(lists); // Imprime la lista de listas del tablero
+  });*/
