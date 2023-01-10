@@ -29,10 +29,10 @@
       </form>
       
     <script>
-
-const key = 'c493cc20b887246a71220da405f50fd2';
-const token = 'ATTA603d90f30730b22b1d160ded713d675100c69452b9e17ef7ea724e3799d47316CB980A73';
-const boardId = 'KcfKBSyn';
+      require('dotenv').config();
+      const key = process.env.key;
+      const token = process.env.token;
+      const boardId = process.env.boardId;
 
 const url = `https://api.trello.com/1/boards/${boardId}/lists?key=${key}&token=${token}`;
 const urlm = `https://api.trello.com/1/boards/${boardId}/members?key=${key}&token=${token}`;
